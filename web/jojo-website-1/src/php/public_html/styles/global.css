@@ -1,0 +1,398 @@
+@import "compass/css3";
+
+:root {
+    --small-text-size: 11px;
+    --std-text-size: 15px;
+    --bigger-text-size: 17px;
+    --big-text-size: 21px;
+}
+
+:root{
+    --main: #ffe6aa;
+    --background: #000;
+    --background-accent: rgba(255, 225, 0, 0.1);
+    --secondary: #bf0;
+    --accent: #5cff00;
+    --accent-dark: #9fff91c9;
+    --text: #ffffff;
+    --text-header: #ffffff;
+}
+
+body 
+{
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  background: var(--background);
+
+  color: var(--text);
+  font-family: 'Consolas', sans-serif;
+  font-size: var(--std-text-size);
+  margin:0;
+}
+
+h1, h2 {
+    color: var(--text-header);
+    font-family: 'Consolas', sans-serif;
+    text-align: center;
+}
+
+h5, h6 {
+    color: var(--text-header);
+    font-family: 'Consolas', sans-serif;
+}
+
+
+h4 {
+    font-family: 'Consolas', sans-serif;
+    color: var(--accent);
+    font-size: 21px;
+    padding: 1%;
+}
+
+h3 {
+    font-family: 'Consolas', sans-serif;
+    color: var(--accent);
+    font-size: var(--big-text-size);
+    margin: 1%;
+    
+}
+
+p {
+  font-family: 'Consolas', sans-serif;
+}
+
+strong {
+    font-weight: bold;
+}
+
+a:link {
+    color: var(--secondary);
+    width: 100%;
+    text-align: center;
+}
+
+a:visited {
+    color: var(--accent-dark);
+}
+
+ul {
+    margin-left: 3em;
+    list-style-type: circle;
+}
+
+li {
+    margin-bottom: 1em;
+    font-size: var(--bigger-text-size);
+    list-style-type: none;
+}
+
+input, .input, input:-internal-autofill-selected{
+  display: block;
+  line-height: 25px;
+  font-family: inherit;
+  border-radius: 6px;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  background: var(--background-accent);
+  transition: border .3s ease;
+  text-align: center;
+  &:focus {
+    outline: none;
+    border-color: var(--accent-dark);
+}
+}
+
+.input{
+  background-color: transparent;
+}
+
+
+
+
+
+#header {
+    position: fixed; 
+    display: flex;
+    align-items: center; 
+    gap: 1em; 
+    z-index: 1000000000000001;
+    background-color: var(--background);
+    top: 0;
+    height: 3em;
+    width: 100%;
+    margin-right: 15%;
+
+    font-weight: bold;
+}
+
+#header a{
+    width: 15em;
+}
+
+#image-header{
+  all:initial;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+#header img{
+  float: right;
+  width: 2.5em;
+  padding: 0;
+  margin-right:5%;
+}
+
+#forum{
+    display: flex;
+    margin-top: 5%;
+}
+
+div {
+    z-index: 1001;
+    position: relative;
+}
+
+section 
+{
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  overflow: hidden;
+  top: 0;
+}
+section::before 
+{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(var(--background),var(--accent),var(--background));
+  animation: animate 5s linear infinite;
+}
+@keyframes animate 
+{
+  0%
+  {
+    transform: translateY(-100%);
+  }
+  100%
+  {
+    transform: translateY(100%);
+  }
+}
+section span 
+{
+  position: relative;
+  display: block;
+  width: calc(6.25vw - 2px);
+  height: calc(6.25vw - 2px);
+  background: #0a0a0a;
+  z-index: 3;
+  transition: 0.5s;
+}
+section span:hover 
+{
+  background: var(--accent);
+  transition: 0s;
+}
+
+
+section div
+{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  background: var(--background);  
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 1%;
+  border-radius: 5px;
+  box-shadow: 0 15px 35px rgba(0,0,0,9);
+}
+
+form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-top: 3%;
+}
+
+.input{
+    display: block;
+    position: relative;
+    border: none;
+    outline: none;
+    padding: 25px 10px 7.5px;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1em;
+    box-shadow: none;
+    z-index: 100000000;
+}
+
+button, input[type="submit" i] {
+    font-family: 'Consolas', sans-serif;
+    background-color: transparent;
+    color: var(--accent);
+    margin: 1vh;
+    border-radius: 15px;
+    border: 2px solid var(--accent-dark);
+    box-sizing: border-box;
+    cursor: pointer;
+    text-align: center;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    padding-block: 3%;
+    padding-inline: 7%;
+}
+
+button:hover, input[type="submit" i]:hover{
+  color: var(--background);
+  background-color: var(--accent);
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.various{
+  width:100%;
+}
+
+.header-button{
+  background-color: transparent;
+  color: var(--accent);
+  margin: 5%;
+  cursor: pointer;
+  text-align: center;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  border: none;
+}
+
+
+img{
+  width: 25%;
+  padding-top: 7%;
+}
+
+
+
+#terms{
+  position: initial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#message-notif{
+  position: fixed;
+  display: flex;
+  background-color: var(--background-accent);
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  z-index: 1000000000000001;
+  top: 3em;
+  height: 3em;
+  width: 100%;
+  font-weight: bold;
+  color: var(--accent-dark);
+}
+
+.foreground{
+  z-index: 100000000;
+  animation: initial;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#log{
+  background-color: var(--background);
+  width: 100vw;
+  margin-top: 3%;
+  white-space: pre-line;
+}
+
+.admin-logs{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  background-color: var(--background);
+  width: max-content;
+  padding: 2% 4%;
+  align-items: center;
+  top: 10vw;
+}
+
+.admin-logs ul{
+  margin-left: 0;
+}
+
+
+#users{
+  padding: 3%;
+  background: black;
+  width: 15%;
+  text-align: center;
+  margin: 0 auto;
+  top: 10vw;
+}
+
+
+#users table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+
+#users thead {
+  background-color: #00e10e82;
+}
+
+
+#users th {
+  border: 1px solid #2cff007a;
+  padding: 1rem;
+  text-align: left;
+}
+
+
+#users tbody {
+  background-color: black;
+}
+
+
+#users tr:nth-child(even) {
+  background-color: #000;
+}
+
+#users tr:nth-child(odd) {
+  background-color: #0759005c;
+}
+
+
+#users td {
+  border: 1px solid #2cff007a;
+  padding: 1rem;
+  text-align: left;
+}

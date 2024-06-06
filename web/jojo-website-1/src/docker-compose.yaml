@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+    php-httpd:
+        build:
+            context: ./php
+        restart: always
+        ports:
+            - 80:80
+        networks:
+          - frontend
+          - backend
+        depends_on:
+          - mysql
+
+    mysql:
+        image: mysql
+        restart: always
+        volumes:
+            - ./mysql:/docker-entrypoint-initdb.d
+        networks:
+            - backend
+        environment:
+            TZ: "Europe/Rome"
+            MYSQL_ROOT_PASSWORD: "6bba23da7f6df87eb215120d86e8ebd8001a695dabafcf8d6ac4b437ab06b716"
+
+    redis:
+        image: redis
+        restart: always
+        networks:
+            - backend
+
+networks:
+    frontend:
+    backend:

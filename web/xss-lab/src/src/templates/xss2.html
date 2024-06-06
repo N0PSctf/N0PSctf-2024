@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}XSS 2{% endblock %}
+
+{% block header %}XSS ME 2{% endblock %}
+
+{% block filter %}You have to bypass this filter:
+```python
+def filter_2(payload):
+    return payload.lower().replace("script", "").replace("img", "").replace("svg", "")
+```{% endblock %}

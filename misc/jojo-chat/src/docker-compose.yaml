@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  jojo_chat:
+    build:
+      context: ./
+    restart: always
+    ports:
+      - 1234:1234
+    networks:
+      - jojo_chat_network
+
+networks:
+  jojo_chat_network:

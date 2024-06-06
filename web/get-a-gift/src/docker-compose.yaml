@@ -1,0 +1,6 @@
+services:
+  getagift:
+    build:
+      context: ./
+    ports:
+      - 80:80

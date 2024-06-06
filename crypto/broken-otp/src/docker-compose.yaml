@@ -1,0 +1,7 @@
+services:
+  broken-otp:
+    build:
+      context: ./
+    restart: always
+    ports:
+      - 1234:1234

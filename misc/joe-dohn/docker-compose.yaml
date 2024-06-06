@@ -1,0 +1,5 @@
+services:
+  challenge:
+    restart: always
+    build:
+      context: ./src

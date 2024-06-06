@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}XSS 4{% endblock %}
+
+{% block header %}XSS ME 4{% endblock %}
+
+{% block filter %}You have to bypass this filter:
+```python
+def filter_4(payload):
+    if any(c in payload for c in '+"/'):
+        return "Nope"
+    if "://" in payload.lower():
+        return "Nope"
+    if "document" in payload.lower():
+        return "Nope"
+    if "cookie" in payload.lower():
+        return "Nope"
+    return payload.replace("script", "").replace("img", "").replace("svg", "")
+```{% endblock %}
