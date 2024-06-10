@@ -36,10 +36,10 @@ The attack exploits this data-dependent timing.
 To perform our timing attack, we follow these steps:
 
 1. We isolate a set of operations that involves a part of the secret and a part of the plaintext, and which timing depends on both parts.
-   The part of the secret shall be small enough to enumerate all candidate values; a byte ($2^8 = 256$ candidate values) is fine but the whole 128 bis secret ($2^{128}$, about $3.4 \times 10^{38}$ values) is not.
+   The part of the secret shall be small enough to enumerate all candidate values; a byte ($2^8 = 256$ candidate values) is fine but the whole 128 bits secret ($2^{128}$, about $3.4 \times 10^{38}$ values) is not.
    At the beginning of the AES encryption, each byte `k` of the 128 bits secret key is first x-ored with the corresponding byte `p` of the 128 bits plaintext.
-   Then, during the first round of encryption, the result `k^p` passes through the AES S-box (`subByte`), is moved by the `shiftRows` transform (but not otherwise modified), and enters `mixColumns` as one element of the left $4 \times 4$ matrix.
-   So, `subByte(k^p)` is multiplied 4 times as left operand during the `mixColumns` transform.
+   Then, during the first round of encryption, the result `k^p` passes through the AES S-box (`subByte`), is moved by the `shiftRows` transform (but not otherwise modified), and enters `mixColumns` as one element of the right $4 \times 4$ matrix.
+   So, `subByte(k^p)` is multiplied 4 times as right operand during the `mixColumns` transform.
    The processing of `subByte(k^p)` is a nice candidate for our timing attack: data-dependent timing, easy to compute all candidate values; let's give it a try.
 
 1. We create a **Timing Model** of this processing: for each possible byte value that enters `mixColumns` we compute an estimate of its contribution to the computation time.
@@ -59,7 +59,7 @@ To perform our timing attack, we follow these steps:
    | 128-255    | 8                     |
 
    As source code and executed binary can be significantly different we could cross-check this with an analysis of the assembly code but as we don't even know what the target processor was, let's optimistically assume that this data-dependent time survived the compilation.
-   So, with our timing model, for each key byte (16), for each candidate value `k` of the key byte (256 values), and for each row of the `ta.dat` file, we can extract the value `p` of the corresponding byte of the plaintext block, and can compute `TM(subByte(k^p))`, our (relative) estimate of the time taken by `mixColumns` to process `k^p` during the first round.
+   So, with our timing model, for each key byte (16), for each candidate value `k` of the key byte (256 values), and for each row of the `ta.dat` file, we can extract the value `p` of the corresponding byte of the plaintext block, and compute `TM(subByte(k^p))`, our (relative) estimate of the time taken by `mixColumns` to process `k^p` during the first round.
 
 1. The next step consists in comparing the 256 candidate values `k` and retain the most promising one.
    The usual way to do this is to compute a correlation metric between the timing model `TM(subByte(k^p))` and the real observed processing time `T`, over all rows of the `ta.dat` file.
@@ -67,7 +67,7 @@ To perform our timing attack, we follow these steps:
    Of course, we do not have access to `t` and `S`, all we have is their sum `T` but still, this decomposition helps understanding.
    If the value of `k` is not the correct one there should be no correlation at all because our timing model has nothing to do with the real processing time; we could as well use a random oracle.
    But if the value of `k` is correct there should be a small correlation because our timing model is correlated with the `t` part of the real observed processing times `T`.
-   As the expected correlation is _linear_ the Pearson Correlation Coefficient (`PCC`) is the statistical tool of choice (_linear_ here means that when our model says 8, `t` should be about 8 times what it is when our model says).
+   As the expected correlation is _linear_ the Pearson Correlation Coefficient (`PCC`) is the statistical tool of choice (_linear_ here means that when our model says 8, `t` should be about 8 times what it is when our model says 1).
 
 1. The `PCC` of 2 random variables `X` and `Y` is: `(E(X * Y) - E(X) * E(Y)) / (Std(X) * Std(Y)`, where `E(X)` is the mean value of random variable `X` and `Std(X)` is its standard deviation.
    In our situation we don't know `E(T)`, `E(TM(subByte(k^p)))`, `Std(T)` and `Std(TM(subByte(k^p)))` but we can estimate them from our data file with simple computations.
